@@ -64,14 +64,29 @@ def valid_url(url: str) -> bool:
     return bool(re.match(r"^https?://[^\s/$.?#].[^\s]*$", url or "", re.IGNORECASE))
 
 
+# Optional: YouTube-Cookies (Netscape-Format) gegen den Bot-Schutz auf Servern.
+# Pfad per COOKIES_FILE setzen oder auf Render eine Secret File "cookies.txt" anlegen.
+# Die Datei wird in ein beschreibbares Temp-Verzeichnis kopiert, da yt-dlp sie
+# beim Beenden zurückschreibt und /etc/secrets schreibgeschützt ist.
+COOKIES_SOURCE = os.environ.get("COOKIES_FILE") or "/etc/secrets/cookies.txt"
+COOKIES_FILE = None
+if os.path.isfile(COOKIES_SOURCE):
+    COOKIES_FILE = os.path.join(tempfile.gettempdir(), "extractor_cookies.txt")
+    shutil.copyfile(COOKIES_SOURCE, COOKIES_FILE)
+
+
 def base_opts() -> dict:
-    return {
+    opts = {
         "quiet": True,
         "no_warnings": True,
         "noplaylist": True,
         "restrictfilenames": False,
         "socket_timeout": 30,
+        "noprogress": True,
     }
+    if COOKIES_FILE:
+        opts["cookiefile"] = COOKIES_FILE
+    return opts
 
 
 # ---------------------------------------------------------------- Info
@@ -274,7 +289,9 @@ def clean_error(msg: str) -> str:
     if "Private video" in msg or "private" in msg.lower() and "video" in msg.lower():
         return "Das Video ist privat oder nicht verfügbar."
     if "Sign in to confirm" in msg:
-        return "YouTube verlangt eine Anmeldung (Bot-Schutz). Bitte später erneut versuchen."
+        if COOKIES_FILE:
+            return "YouTube blockiert den Server (Bot-Schutz). Die Cookies sind evtl. abgelaufen – bitte neu exportieren."
+        return "YouTube blockiert den Server (Bot-Schutz). Cookies einrichten (siehe README) oder die Seite lokal starten."
     if "does not pass filter" in msg:
         return "Das Video ist zu lang."
     return msg[:300]
