@@ -109,7 +109,11 @@ def api_info():
     if not valid_url(url):
         return jsonify(error="Bitte einen gültigen Link (http/https) eingeben."), 400
     try:
-        with yt_dlp.YoutubeDL(base_opts()) as ydl:
+        opts = base_opts()
+        # Nur Infos holen – keine Formatauswahl erzwingen, sonst bricht es ab,
+        # bevor wir eine verständliche Meldung geben können.
+        opts["ignore_no_formats_error"] = True
+        with yt_dlp.YoutubeDL(opts) as ydl:
             info = ydl.extract_info(url, download=False)
     except yt_dlp.utils.DownloadError as e:
         return jsonify(error=clean_error(str(e))), 400
@@ -118,6 +122,10 @@ def api_info():
 
     if info.get("_type") == "playlist" and info.get("entries"):
         info = next(iter(info["entries"]))
+
+    if not info.get("formats") and not info.get("url"):
+        return jsonify(error="Für dieses Video wurden keine Download-Formate gefunden. "
+                             "Bei YouTube: Cookies erneuern oder später erneut versuchen."), 400
 
     heights = sorted(
         {f.get("height") for f in info.get("formats") or [] if f.get("height") and f.get("vcodec") != "none"},
@@ -292,6 +300,8 @@ def clean_error(msg: str) -> str:
         if COOKIES_FILE:
             return "YouTube blockiert den Server (Bot-Schutz). Die Cookies sind evtl. abgelaufen – bitte neu exportieren."
         return "YouTube blockiert den Server (Bot-Schutz). Cookies einrichten (siehe README) oder die Seite lokal starten."
+    if "Requested format is not available" in msg:
+        return "Dieses Format/diese Auflösung ist für das Video nicht verfügbar. Bitte eine andere Auswahl treffen."
     if "does not pass filter" in msg:
         return "Das Video ist zu lang."
     return msg[:300]
