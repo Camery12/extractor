@@ -58,6 +58,28 @@ Im Repo auf **Code → Codespaces → Create codespace** klicken. ffmpeg und all
 Pakete werden automatisch installiert, die Seite startet von selbst und öffnet sich
 in einem neuen Tab.
 
+## YouTube auf dem Server: „Bot-Schutz“-Fehler beheben
+
+YouTube blockiert Anfragen von Hosting-Anbietern wie Render. Abhilfe: Cookies eines
+eingeloggten YouTube-Kontos hinterlegen.
+
+> ⚠️ Am besten ein **Zweit-Google-Konto** verwenden – YouTube kann Konten, die für
+> Downloads genutzt werden, einschränken.
+
+1. Im Browser (Chrome/Edge/Firefox) ein **privates Fenster** öffnen und bei YouTube einloggen.
+2. Die Erweiterung **„Get cookies.txt LOCALLY“** installieren (im privaten Fenster erlauben).
+3. Auf youtube.com die Erweiterung öffnen → **Export** → Datei `cookies.txt` speichern.
+4. Das private Fenster **schließen, ohne dich auszuloggen** (sonst werden die Cookies ungültig).
+5. Bei Render: Service → **Environment** → **Secret Files** → **Add Secret File**
+   - Filename: `cookies.txt`
+   - Contents: kompletten Inhalt der Datei einfügen → **Save Changes**
+6. Render startet die Seite neu – danach funktioniert YouTube.
+
+Cookies laufen irgendwann ab (meist nach Wochen bis Monaten). Kommt der Fehler wieder,
+einfach die Schritte 1–5 wiederholen. Lokal (`python app.py` auf dem eigenen PC) sind
+keine Cookies nötig. Alternativ kann der Pfad auch über die Umgebungsvariable
+`COOKIES_FILE` gesetzt werden.
+
 ## Tipps
 
 - yt-dlp regelmäßig aktualisieren (`pip install -U yt-dlp`), da Plattformen
