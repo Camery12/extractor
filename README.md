@@ -36,6 +36,28 @@ docker build -t extractor .
 docker run -p 5000:5000 extractor
 ```
 
+## Online stellen (über GitHub)
+
+GitHub Pages geht nicht, da die Seite einen Python-Server + ffmpeg braucht.
+Stattdessen:
+
+### Option 1: Render (kostenlos, öffentliche URL)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/camery12/extractor)
+
+1. Auf den Button klicken und mit GitHub bei Render anmelden
+2. „Apply“ klicken – Render baut die Seite aus dem `Dockerfile` (`render.yaml` ist schon dabei)
+3. Nach ein paar Minuten ist sie unter `https://extractor-xxxx.onrender.com` erreichbar
+
+Hinweis: Der Gratis-Plan schläft nach 15 Min. Inaktivität ein (erster Aufruf dauert dann ~1 Min.).
+Das Repo muss dafür **öffentlich** sein oder Render Zugriff darauf haben.
+
+### Option 2: GitHub Codespaces (läuft im Browser)
+
+Im Repo auf **Code → Codespaces → Create codespace** klicken. ffmpeg und alle
+Pakete werden automatisch installiert, die Seite startet von selbst und öffnet sich
+in einem neuen Tab.
+
 ## Tipps
 
 - yt-dlp regelmäßig aktualisieren (`pip install -U yt-dlp`), da Plattformen
