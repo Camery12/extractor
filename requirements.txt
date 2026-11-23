@@ -1,3 +1,6 @@
 flask>=3.0
-yt-dlp>=2025.1.1
+# [default] enthält yt-dlp-ejs (JS-Challenge-Löser für YouTube)
+yt-dlp[default]>=2025.11.12
+# JavaScript-Laufzeit, die yt-dlp für YouTube benötigt
+deno>=2.0
 gunicorn>=22.0
