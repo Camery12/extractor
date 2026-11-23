@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Extractor – Video &amp; Audio Downloader</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header>
+    <div class="logo">⬇ Extractor</div>
+    <p class="tagline">Videos &amp; Musik von TikTok, YouTube und vielen weiteren Seiten herunterladen</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <form id="url-form" autocomplete="off">
+        <input id="url" type="url" placeholder="Link einfügen, z.B. https://www.tiktok.com/@user/video/…" required />
+        <button type="button" id="paste" class="ghost" title="Aus Zwischenablage einfügen">📋</button>
+        <button type="submit" id="analyze">Analysieren</button>
+      </form>
+      <div id="platform-badge" class="badge hidden"></div>
+      <div id="error" class="error hidden"></div>
+    </section>
+
+    <section id="result" class="card hidden">
+      <div class="preview">
+        <img id="thumb" alt="" />
+        <div class="meta">
+          <h2 id="title"></h2>
+          <p id="uploader"></p>
+          <p id="duration" class="muted"></p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-kind="video">🎬 Video</button>
+        <button class="tab" data-kind="audio">🎵 Audio</button>
+      </div>
+
+      <div class="options" id="video-options">
+        <label>Format
+          <select id="video-format">
+            {% for f in video_formats %}<option value="{{ f }}">{{ f|upper }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Auflösung
+          <select id="resolution">
+            {% for r in resolutions %}
+            <option value="{{ r }}">{{ 'Beste verfügbar' if r == 'best' else ('4K (2160p)' if r == '2160' else ('2K (1440p)' if r == '1440' else r ~ 'p')) }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+
+      <div class="options hidden" id="audio-options">
+        <label>Format
+          <select id="audio-format">
+            {% for f in audio_formats %}<option value="{{ f }}">{{ f|upper }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Bitrate
+          <select id="bitrate">
+            {% for b in bitrates %}<option value="{{ b }}" {% if b == '192' %}selected{% endif %}>{{ b }} kbit/s</option>{% endfor %}
+          </select>
+        </label>
+      </div>
+
+      <button id="download" class="primary">Herunterladen</button>
+
+      <div id="progress-wrap" class="hidden">
+        <div class="progress"><div id="progress-bar"></div></div>
+        <p id="progress-text" class="muted"></p>
+      </div>
+    </section>
+
+    <section class="card platforms">
+      <h3>Unterstützte Plattformen</h3>
+      <div class="chips">
+        {% for p in platforms %}<span class="chip">{{ p }}</span>{% endfor %}
+        <span class="chip more">+ über 1000 weitere</span>
+      </div>
+    </section>
+
+    <p class="disclaimer">
+      Lade nur Inhalte herunter, an denen du die Rechte hast oder deren Download erlaubt ist.
+      Beachte das Urheberrecht und die Nutzungsbedingungen der jeweiligen Plattform.
+    </p>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

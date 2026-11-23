@@ -1,0 +1,123 @@
+:root {
+  --bg: #0f1117;
+  --card: #181b24;
+  --border: #2a2f3d;
+  --text: #e8eaf0;
+  --muted: #8a90a2;
+  --accent: #ff3d6e;
+  --accent2: #6c5cff;
+  --error: #ff5c5c;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at 20% 0%, #1d1a35 0%, var(--bg) 55%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header { text-align: center; padding: 48px 16px 24px; }
+.logo {
+  font-size: 2.4rem; font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.tagline { color: var(--muted); margin: 8px 0 0; }
+
+main { max-width: 760px; margin: 0 auto; padding: 0 16px 48px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#url-form { display: flex; gap: 8px; }
+#url-form input {
+  flex: 1; min-width: 0;
+  padding: 14px 16px; font-size: 1rem;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 10px; outline: none;
+}
+#url-form input:focus { border-color: var(--accent2); }
+
+button {
+  cursor: pointer; border: none; border-radius: 10px;
+  padding: 12px 18px; font-size: 1rem; font-weight: 600;
+  background: var(--accent2); color: #fff;
+  transition: opacity .15s, transform .05s;
+}
+button:hover { opacity: .9; }
+button:active { transform: scale(.98); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.ghost { background: transparent; border: 1px solid var(--border); }
+button.primary {
+  width: 100%; margin-top: 16px; padding: 14px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+
+.badge {
+  display: inline-block; margin-top: 12px; padding: 4px 10px;
+  border-radius: 999px; font-size: .85rem;
+  background: rgba(108, 92, 255, .15); color: #b8b0ff;
+}
+.error {
+  margin-top: 12px; padding: 10px 14px; border-radius: 10px;
+  background: rgba(255, 92, 92, .12); color: var(--error);
+}
+
+.preview { display: flex; gap: 16px; align-items: flex-start; }
+.preview img {
+  width: 200px; max-width: 40%; aspect-ratio: 16/9; object-fit: cover;
+  border-radius: 10px; background: var(--bg);
+}
+.meta h2 { margin: 0 0 6px; font-size: 1.1rem; line-height: 1.35; word-break: break-word; }
+.meta p { margin: 0 0 4px; }
+.muted { color: var(--muted); font-size: .9rem; }
+
+.tabs { display: flex; gap: 8px; margin: 20px 0 12px; }
+.tab { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--muted); }
+.tab.active { color: var(--text); border-color: var(--accent2); background: rgba(108, 92, 255, .15); }
+
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.options label { display: flex; flex-direction: column; gap: 6px; font-size: .85rem; color: var(--muted); }
+select {
+  padding: 12px; font-size: 1rem;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 10px;
+}
+select option:disabled { color: #555; }
+
+.progress { height: 10px; background: var(--bg); border-radius: 999px; overflow: hidden; margin-top: 16px; }
+#progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .3s;
+}
+#progress-bar.indeterminate { width: 40% !important; animation: slide 1.2s infinite ease-in-out; }
+@keyframes slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+
+.platforms h3 { margin: 0 0 12px; font-size: 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 6px 12px; border-radius: 999px; font-size: .85rem;
+  background: var(--bg); border: 1px solid var(--border);
+}
+.chip.more { color: var(--muted); }
+
+.disclaimer { text-align: center; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 520px) {
+  .preview { flex-direction: column; }
+  .preview img { width: 100%; max-width: 100%; }
+  .options { grid-template-columns: 1fr; }
+  #analyze { padding: 12px; }
+}
